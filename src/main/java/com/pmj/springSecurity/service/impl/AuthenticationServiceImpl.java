@@ -1,6 +1,7 @@
 package com.pmj.springSecurity.service.impl;
 
 import com.pmj.springSecurity.dto.JwtAuthenticationResponseDto;
+import com.pmj.springSecurity.dto.RefreshTokenRequestDto;
 import com.pmj.springSecurity.dto.SignInRequestDto;
 import com.pmj.springSecurity.dto.SignUpRequestDto;
 import com.pmj.springSecurity.entity.Role;
@@ -58,5 +59,23 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
 
         return jwtAuthenticationResponseDto;
 
+    }
+
+    public JwtAuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) {
+        String userEmail = jwtService.extractUsername(refreshTokenRequestDto.getAccessToken());
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        if (jwtService.isTokenValid(refreshTokenRequestDto.getAccessToken(), user)){
+            var jwt = jwtService.generateToken(user);
+
+            JwtAuthenticationResponseDto jwtAuthenticationResponseDto = new JwtAuthenticationResponseDto();
+
+            jwtAuthenticationResponseDto.setAccessToken(jwt);
+            jwtAuthenticationResponseDto.setRefreshToken(refreshTokenRequestDto.getAccessToken());
+
+            return jwtAuthenticationResponseDto;
+
+        }
+
+        return null;
     }
 }

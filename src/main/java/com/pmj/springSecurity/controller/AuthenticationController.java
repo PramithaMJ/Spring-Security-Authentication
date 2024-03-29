@@ -1,6 +1,7 @@
 package com.pmj.springSecurity.controller;
 
 import com.pmj.springSecurity.dto.JwtAuthenticationResponseDto;
+import com.pmj.springSecurity.dto.RefreshTokenRequestDto;
 import com.pmj.springSecurity.dto.SignInRequestDto;
 import com.pmj.springSecurity.dto.SignUpRequestDto;
 import com.pmj.springSecurity.entity.User;
@@ -27,6 +28,11 @@ public class AuthenticationController {
     @PostMapping("/signIn")
     public ResponseEntity<JwtAuthenticationResponseDto> signIn(@RequestBody SignInRequestDto signInRequestDto) {
         return ResponseEntity.ok(authenticationService.signIn(signInRequestDto));
+    }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<JwtAuthenticationResponseDto> refresh(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequestDto));
     }
 
 }
